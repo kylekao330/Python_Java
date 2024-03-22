@@ -1,0 +1,45 @@
+#Define some colors
+TESTING = True
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+
+# Set the width and height of the screen [width, height]
+WIDTH = 1000
+HEIGHT = 643
+
+# FPS is Frame Per Second
+FPS = 40
+
+CREATE_TUBE_DELAY = FPS * 4
+CREATE_FLAP_DELAY = 10
+COIN_FLIP_DELAY = 5
+#Directions
+LEFT = 270
+RIGHT = 90
+
+TARGET_WIDTH = 10
+
+TUBE_SPEED = 3
+
+GAP = 200
+# TUBE TYPES
+DOWNWARD = 1
+UPWARD = 2
+
+JUMP_HEIGHT = 5
+FLYING_MODE = 1
+DIZZY_MODE = 2
+
+PLAYER_SPAWN_X = WIDTH/2
+PLAYER_SPAWN_Y = HEIGHT/2
+
+# GAME Modes
+GAME_LANDING_PAGE = 1
+GAME_IN_SESSION = 2
+GAME_OVER = 3
+GAME_WIN = 4
+GAME_CREDIT = 5
+
+GAME_DURATION_IN_SECOND = 20
