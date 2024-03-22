@@ -1,6 +1,6 @@
 Kyle Kao - 3/2024
 
-Project Name: FlappyDuck using **pygame** libary
+Project Name: Birdie using **pygame** libary
 
 Summary:
 
