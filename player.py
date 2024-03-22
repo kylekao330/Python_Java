@@ -1,71 +1,70 @@
 import pygame
-
+import random as r
 from config import *
-class Player(pygame.sprite.Sprite):
-    BIRD_SUFFIX = ["1","2"]
 
-    def __init__(self,x,y,size,screen):
+class Player(pygame.sprite.Sprite):
+
+    # BIRD_TYPES is static variable, there is only one instance of this in your program
+    BIRD_SUFFIX = ["1","2","3","4"]
+
+    def __init__(self,x,y,size, direction, screen):
         super().__init__()
+
         self.x = x
         self.y = y
+        self.direction = direction
         self.size = size
         self.screen = screen
-
-        self.flying_images = []
-
+        self.right_images = []
+        self.left_images = []
 
         for suffix in Player.BIRD_SUFFIX:
-            image = pygame.image.load(f"assets/images/Green duck #{suffix}-01.png")
+            image = pygame.image.load(f"assets/player-{suffix}.png")
             image = pygame.transform.scale(image, (int(1.3*self.size),self.size))
-            self.flying_images.append(image)
+            self.right_images.append(image)
 
+            image = pygame.transform.flip(image,True, False)
+            self.left_images.append(image)
+
+        self.speed = 6
         self.img_index = 0
         self.bird_flap_timer = CREATE_FLAP_DELAY
-        self.rect = pygame.Rect(self.x, self.y, self.flying_images[0].get_width(), self.flying_images[0].get_height())
-        self.fall_speed = 1
-        self.gravity = 1
-
-        self.mode = FLYING_MODE
-        self.dizzy_image = pygame.image.load("assets/images/Green duck #5-01.png")
-        self.dizzy_image = pygame.transform.scale(self.dizzy_image, (self.size, self.size))
-
-    def start_dizzy_mode(self):
-        self.mode = DIZZY_MODE
-
-    def start_flying_mode(self):
-        self.mode = FLYING_MODE
+        self.rect = pygame.Rect(self.x, self.y, self.right_images[0].get_width(), self.right_images[0].get_height())
 
     def update(self):
-        self.fall_speed += self.gravity
-        self.y += self.fall_speed
         keys_pressed = pygame.key.get_pressed()
-
-        if self.mode == FLYING_MODE:
-            if keys_pressed[pygame.K_SPACE]:
-                self.fall_speed = -JUMP_HEIGHT
         if TESTING:
              pygame.draw.rect(self.screen, (255, 0, 255), self.rect)
-        image = self.next_costume()
+        if keys_pressed[pygame.K_w]:
+            self.y -= self.speed
+
+        if keys_pressed[pygame.K_s]:
+            self.y += self.speed
+
+        if keys_pressed[pygame.K_d]:
+            self.direction = RIGHT
+            self.x += self.speed
+
+        if keys_pressed[pygame.K_a]:
+            self.direction = LEFT
+            self.x -= self.speed
         self.rect.y = self.y
         self.rect.x = self.x
+        image = self.next_costume()
         self.screen.blit(image, (self.x, self.y))
 
     def set_location(self,x,y):
         self.x = x
         self.y = y
-        self.rect.x = self.x
-        self.rect.y = self.y
-        self.fall_speed = 0
-        self.mode = FLYING_MODE
 
     def next_costume(self):
-        if self.mode  == FLYING_MODE:
-            self.bird_flap_timer -= 1
-            if self.bird_flap_timer == 0:
-                self.bird_flap_timer = CREATE_FLAP_DELAY
-                self.img_index += 1
-                if self.img_index == len(self.flying_images):
-                    self.img_index = 0
-            return self.flying_images[self.img_index]
+        self.bird_flap_timer -= 1
+        if self.bird_flap_timer == 0:
+            self.bird_flap_timer = CREATE_FLAP_DELAY
+            self.img_index += 1
+            if self.img_index == len(self.right_images):
+                self.img_index = 0
+        if self.direction == LEFT:
+                return self.left_images[self.img_index]
         else:
-            return self.dizzy_image
+                return self.right_images[self.img_index]
